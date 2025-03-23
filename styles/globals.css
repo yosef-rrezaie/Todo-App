@@ -15,6 +15,8 @@ a {
   margin: 0;
 }
 
+
+
 header {
   background-color: #3f47f4;
   height: 150px;
@@ -62,8 +64,8 @@ aside p {
 
 aside li {
   font-size: 1.2rem;
-  font-weight: 500;
-  color: F4F5FA;
+  font-weight: 600;
+  color: #66676c;
   margin: 15px 0;
   display: flex;
   align-items: center;
