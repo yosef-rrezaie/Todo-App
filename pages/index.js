@@ -1,3 +1,3 @@
 export default function Home() {
-  return <></>;
+  return <><p>Todo App</p></>;
 }
