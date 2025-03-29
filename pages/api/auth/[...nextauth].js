@@ -6,7 +6,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 const authOptions = {
   session: { strategy: "jwt" },
-  Providers: [
+  providers: [
     CredentialsProvider({
       async authorize(credentials, req) {
         const { email, password } = credentials;
