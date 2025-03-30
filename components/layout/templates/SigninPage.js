@@ -1,22 +1,29 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 
 function SigninPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { data, status } = useSession();
+  console.log(status);
+
   const router = useRouter();
 
+  useEffect(() => {
+    if (status === "authenticated") router.replace("/");
+  }, [status]);
+
   async function loginHandler() {
-    console.log("hello")
+    console.log("hello");
     const res = await signIn("credentials", {
       email,
       password,
       redirect: false,
     });
 
-    if(!res.error) router.push("/")
+    if (!res.error) router.push("/");
   }
   return (
     <div className="signin-form">
