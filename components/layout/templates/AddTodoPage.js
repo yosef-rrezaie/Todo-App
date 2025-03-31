@@ -1,34 +1,30 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
 import { GrAddCircle } from "react-icons/gr";
 import { BsAlignStart } from "react-icons/bs";
 import { FiSettings } from "react-icons/fi";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { MdDoneAll } from "react-icons/md";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+
 import { ToastContainer, toast } from "react-toastify";
 
-function AddTodoPage() {
+function AddTodoPage({ session }) {
+  console.log("session :", session.user.email);
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("todo");
-  const { data: inormation, status: situation } = useSession();
-  const [email, setEmail] = useState("");
   const router = useRouter();
-  console.log(situation);
 
-  useEffect(() => {
-    if (situation === "unauthenticated") router.replace("/");
-  }, [situation]);
-
+  
   async function clickHandler() {
     const res = await fetch("/api/todos", {
       method: "POST",
-      body: JSON.stringify({ title, status, email: inormation.user.email }),
+      body: JSON.stringify({ title, status, email: session.user.email}),
       headers: { "Content-Type": "application/json" },
     });
     const data = await res.json();
-    if(data.status==="failed") {
-      toast.error("Please enter title")
+    if (data.status === "failed") {
+      toast.error("Please enter title");
     }
     if (data.status === "success") {
       setStatus("todo");
@@ -115,3 +111,5 @@ function AddTodoPage() {
 }
 
 export default AddTodoPage;
+
+
