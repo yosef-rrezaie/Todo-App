@@ -4,10 +4,39 @@ import { BsAlignStart } from "react-icons/bs";
 import { FiSettings } from "react-icons/fi";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { MdDoneAll } from "react-icons/md";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { ToastContainer, toast } from "react-toastify";
 
 function AddTodoPage() {
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("todo");
+  const { data: inormation, status: situation } = useSession();
+  const [email, setEmail] = useState("");
+  const router = useRouter();
+  console.log(situation);
+
+  useEffect(() => {
+    if (situation === "unauthenticated") router.replace("/");
+  }, [situation]);
+
+  async function clickHandler() {
+    const res = await fetch("/api/todos", {
+      method: "POST",
+      body: JSON.stringify({ title, status, email: inormation.user.email }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await res.json();
+    if(data.status==="failed") {
+      toast.error("Please enter title")
+    }
+    if (data.status === "success") {
+      setStatus("todo");
+      setTitle("");
+      toast.success("Todo added");
+    }
+  }
+
   return (
     <div className="add-form">
       <h2>
@@ -78,8 +107,9 @@ function AddTodoPage() {
             />
           </div>
         </div>
-        <button>Add</button>
+        <button onClick={clickHandler}>Add</button>
       </div>
+      <ToastContainer />
     </div>
   );
 }

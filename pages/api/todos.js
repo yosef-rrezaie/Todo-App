@@ -12,14 +12,14 @@ export default async function handler(req, res) {
       .json({ status: "failed", message: "Erorr to connecting to DB" });
   }
 
-  const session = await getSession({ req });
-  if (!session) {
-    return res
-      .status(401)
-      .json({ status: "failed", message: "You are not logged in!" });
-  }
+  // const session = await getSession({ req });
+  // if (!session) {
+  //   return res
+  //     .status(401)
+  //     .json({ status: "failed", message: "You are not logged in!" });
+  // }
 
-  const user = await User.findOne({ email: session.user.email });
+  const user = await User.findOne({ email: req.body.email });
 
   if (req.method === "POST") {
     const { title, status } = req.body;
