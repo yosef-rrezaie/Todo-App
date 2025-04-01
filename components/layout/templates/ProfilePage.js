@@ -2,13 +2,21 @@ import React, { useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import ProfileForm from "../modules/ProfileForm";
 
-function ProfilePage({ data }) {
+function ProfilePage({ data : information }) {
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
-  console.log(data);
+    console.log(information)
+  async function submitHnadler() {
+    const res = await fetch("/api/profile", {
+      method: "POST",
+      body: JSON.stringify({ name, lastName, password, email: information.email }),
+      headers: { "Content-Type": "application/json" },
+    });
 
-  function submitHnadler() {}
+    const data = await res.json();
+    console.log(data);
+  }
 
   return (
     <div className="profile-form">
